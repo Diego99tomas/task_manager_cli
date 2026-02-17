@@ -4,7 +4,7 @@
         "title": "CREATE APP FOR ANDROID",
         "description": "calculator",
         "priority": "low",
-        "status": "pending",
+        "status": "completed",
         "created_at": "2026-02-16"
     },
     {
@@ -12,7 +12,7 @@
         "title": "Homework",
         "description": "homework math",
         "priority": "high",
-        "status": "pending",
+        "status": "completed",
         "created_at": "2026-02-16"
     },
     {
@@ -20,7 +20,7 @@
         "title": "CREATE APP TASK",
         "description": "I need interface for user",
         "priority": "low",
-        "status": "pending",
+        "status": "completed",
         "created_at": "2026-02-16"
     },
     {
@@ -28,6 +28,14 @@
         "title": "Homework",
         "description": "homework spanish",
         "priority": "low",
+        "status": "pending",
+        "created_at": "2026-02-17"
+    },
+    {
+        "id": "8839cc45-0836-4282-bc52-24d8a946cb4a",
+        "title": "VS code installation",
+        "description": "IDE for programming",
+        "priority": "medium",
         "status": "pending",
         "created_at": "2026-02-17"
     }

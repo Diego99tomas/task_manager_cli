@@ -22,15 +22,15 @@ A console application developed in Python that allows you to register task, view
 
 ## 📂 Project Structure
 
-📦 task_manager_cli
-┣ 📦 models
-    ┣ 📜 task.py
-┣ 📦 services
-    ┣ 📜 task_manager.py
-┣ 📦 storage
+- 📦 task_manager_cli
+- ┣ 📦 models
+-    ┣ 📜 task.py
+- ┣ 📦 services
+-    ┣ 📜 task_manager.py
+- ┣ 📦 storage
     ┣ 📜 json_storage.json    
-┣ 📜 main.py  
-┗ 📜 README.md
+- ┣ 📜 main.py  
+- ┗ 📜 README.md
 
 ## 🧠 Applied learning
 
