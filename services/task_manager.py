@@ -22,12 +22,12 @@ class TaskManager:
             print(f"{i}. ",task)
     
 
-    def task_completed(self,pos):
+    def task_completed(self,pos:int):
         self.list_of_tasks[pos-1].status="completed"
         self.my_storage.save_task(self.list_of_tasks)
 
     
-    def filtered_task_pending_or_completed(self,status):
+    def filtered_task_pending_or_completed(self,status:str):
         filtered_tasks_list=[print(task) for task in self.list_of_tasks if task.status==status]
         print(f"{len(filtered_tasks_list)} match were found")  
 
@@ -40,6 +40,12 @@ class TaskManager:
         print(f"Tasks pending : {len(pending)}")
         rate=(len(completed)*100)/len(self.list_of_tasks)
         print(f"Completion rate: {rate}%")
+
+    def tasks_for_priority(self):
+        priority_high=[print(task) for task in self.list_of_tasks if task.priority=="high"]
+        print(f"Tasks with priority high: {len(priority_high)} ↑ \n")
+        priority_medium=[print(task) for task in self.list_of_tasks if task.priority=="medium"]
+        print(f"Tasks with priority medium: {len(priority_medium)} ↑ \n")
+        priority_low=[print(task) for task in self.list_of_tasks if task.priority=="low"]
+        print(f"Tasks with priority low: {len(priority_low)} ↑ \n")
         
-
-

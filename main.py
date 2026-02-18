@@ -10,6 +10,7 @@ def show_menu():
                         "3. Mark task completed\n"
                         "4. Filterd task for status\n"
                         "5. Dashboard\n"
+                        "6. Task for priority\n"
                         "0. Salir\n"
                     ))
                 except ValueError:
@@ -45,6 +46,9 @@ def show_menu():
 
                     case 5:
                         menu.general_summary()
+                
+                    case 6:
+                        menu.tasks_for_priority()               
                 
                     case 0:
                         print("Thanks")
