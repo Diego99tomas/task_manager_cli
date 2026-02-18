@@ -1,5 +1,3 @@
-
-import json
 from models.task import Task
 from storage.json_storage import Storage
 
@@ -34,7 +32,14 @@ class TaskManager:
         print(f"{len(filtered_tasks_list)} match were found")  
 
 
-
+    def general_summary(self):
+        print(f"Total tasks : {len(self.list_of_tasks)}")
+        completed=[task_completed for task_completed in self.list_of_tasks if task_completed.status=="completed"] 
+        print(f"Tasks completed : {len(completed)}")
+        pending=[task_pending for task_pending in self.list_of_tasks if task_pending.status=="pending"] 
+        print(f"Tasks pending : {len(pending)}")
+        rate=(len(completed)*100)/len(self.list_of_tasks)
+        print(f"Completion rate: {rate}%")
         
 
 

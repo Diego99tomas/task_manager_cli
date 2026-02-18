@@ -9,6 +9,7 @@ def show_menu():
                         "2. Show all task\n"
                         "3. Mark task completed\n"
                         "4. Filterd task for status\n"
+                        "5. Dashboard\n"
                         "0. Salir\n"
                     ))
                 except ValueError:
@@ -39,8 +40,11 @@ def show_menu():
                         except ValueError:
                             print("Enter a number")
                     case 4:
-                            status=input("Enter completed or pending: ").lower().strip()
-                            menu.filtered_task_pending_or_completed(status)
+                        status=input("Enter completed or pending: ").lower().strip()
+                        menu.filtered_task_pending_or_completed(status)
+
+                    case 5:
+                        menu.general_summary()
                 
                     case 0:
                         print("Thanks")
