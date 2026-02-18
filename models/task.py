@@ -5,6 +5,7 @@ import uuid
 class Task:
     def __init__(self,title:str,description:str,priority:str,id=None,created_at=None,status="pending"):
         priority_options=["high","medium","low"]
+        status_options=["completed","pending"]
         
         self.id=id if id else uuid.uuid4().__str__()
         self.title=title
@@ -14,7 +15,10 @@ class Task:
             raise ValueError(f"Invalid option. Choice {priority_options} " )
         self.priority=priority
 
+        if status not in status_options:
+            raise ValueError(f"Invalid option. Choice {priority_options} " )
         self.status=status
+        
         self.created_at=created_at if created_at else date.today().__str__()
 
  
