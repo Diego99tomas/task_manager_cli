@@ -9,22 +9,22 @@ class Storage:
        self.loading_tasks()
 
     
-    def loading_tasks(self):
+    def loading_tasks(self)->list:
         try:
             with open(self.NAME_STORAGE,"r") as loading_tasks:
                 tasks=json.load(loading_tasks) 
                 self.save_to_do_list=[self.from_dict(t) for t in tasks]
-                print("Loading tasks correctly")
+                return self.save_to_do_list
         except FileNotFoundError:
             self.save_to_do_list=[]
-            print("The file was not found, a new one is being created")
+            return self.save_to_do_list
     
 
-    def save_task(self,new_list):
+    def save_task(self,new_list)->bool:
             with open(self.NAME_STORAGE,"w") as add_task:
                     json.dump([self.to_dict(task) for task in new_list],
                             add_task,indent=4)
-                    print("Task added correctly")
+                    return True
 
 
     @staticmethod

@@ -4,48 +4,46 @@ from storage.json_storage import Storage
 class TaskManager:
     def __init__(self):
         self.my_storage=Storage()
-        self.list_of_tasks=self.my_storage.save_to_do_list
+        self.list_of_tasks=self.my_storage.loading_tasks()
         
 
     def add_task(self,title:str,description:str, priority:str):
             new_task=Task(title,description,priority)
             self.list_of_tasks.append(new_task)
-            self.my_storage.save_task(self.list_of_tasks)
+            added_task=self.my_storage.save_task(self.list_of_tasks)
+            return added_task 
             
            
     def show_all_tasks(self):
-        if not self.list_of_tasks:
-            print("There are no tasks")
-            return
-        for i,task in enumerate(self.list_of_tasks):
-            i+=1
-            print(f"{i}. ",task)
+        return self.list_of_tasks
     
 
     def task_completed(self,pos:int):
+        if pos<0 or pos>len(self.list_of_tasks):
+            return
+        
         self.list_of_tasks[pos-1].status="completed"
         self.my_storage.save_task(self.list_of_tasks)
-
     
     def filtered_task_pending_or_completed(self,status:str):
-        filtered_tasks_list=[print(task) for task in self.list_of_tasks if task.status==status]
-        print(f"{len(filtered_tasks_list)} match were found")  
+        filtered_tasks_list=[task for task in self.list_of_tasks if task.status==status]
+        return filtered_tasks_list 
 
 
     def general_summary(self):
-        print(f"Total tasks : {len(self.list_of_tasks)}")
+        if not self.list_of_tasks:
+            return 
         completed=[task_completed for task_completed in self.list_of_tasks if task_completed.status=="completed"] 
-        print(f"Tasks completed : {len(completed)}")
         pending=[task_pending for task_pending in self.list_of_tasks if task_pending.status=="pending"] 
-        print(f"Tasks pending : {len(pending)}")
         rate=(len(completed)*100)/len(self.list_of_tasks)
-        print(f"Completion rate: {rate}%")
-
+        
+        return len(completed),len(pending),rate
+            
+    
     def tasks_for_priority(self):
-        priority_high=[print(task) for task in self.list_of_tasks if task.priority=="high"]
-        print(f"Tasks with priority high: {len(priority_high)} ↑ \n")
-        priority_medium=[print(task) for task in self.list_of_tasks if task.priority=="medium"]
-        print(f"Tasks with priority medium: {len(priority_medium)} ↑ \n")
-        priority_low=[print(task) for task in self.list_of_tasks if task.priority=="low"]
-        print(f"Tasks with priority low: {len(priority_low)} ↑ \n")
+        priority_high=[task for task in self.list_of_tasks if task.priority=="high"]
+        priority_medium=[task for task in self.list_of_tasks if task.priority=="medium"]
+        priority_low=[task for task in self.list_of_tasks if task.priority=="low"]
+        
+        return len(priority_high),len(priority_medium),len(priority_low)
         
