@@ -16,7 +16,7 @@ class Task:
         self.priority=priority
 
         if status not in status_options:
-            raise ValueError(f"Invalid option. Choice {priority_options} " )
+            raise ValueError(f"Invalid option. Choice {status_options} " )
         self.status=status
         
         self.created_at=created_at if created_at else date.today().__str__()
