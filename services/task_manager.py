@@ -18,8 +18,9 @@ class TaskManager:
     
 
     def task_completed(self,pos:int):
-        if pos<0 or pos>len(self.list_of_tasks):
-            return
+        if pos<=0 or pos>len(self.list_of_tasks):
+            raise IndexError("Task position out of range")
+
         self.list_of_tasks[pos-1].status="completed"
         self.my_storage.save_task(self.list_of_tasks)
 
