@@ -20,11 +20,10 @@ class Storage:
             return self.save_to_do_list
     
 
-    def save_task(self,new_list)->bool:
-            with open(self.NAME_STORAGE,"w") as add_task:
+    def save_task(self,new_list):
+                with open(self.NAME_STORAGE,"w") as add_task:
                     json.dump([self.to_dict(task) for task in new_list],
                             add_task,indent=4)
-                    return True
 
 
     @staticmethod
