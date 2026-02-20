@@ -41,33 +41,31 @@ def show_menu():
                     case 3:
                         try:
                             pos=int(input("Enter the position of the completed task: "))
-                            if pos>len(task_manager.list_of_tasks) or pos<=0:
-                                print("Out of range")
-                            
-                            else:
-                                task_manager.task_completed(pos)
-                                print("Task modified correctly") 
+                            task_manager.task_completed(pos)
+                            print("Task modified correctly") 
                                     
                         except ValueError:
                             print("Enter a number")
+                        except IndexError:
+                            print("Task position out of range")
+                            
 
                     case 4:
                         status=input("Enter completed or pending: ").lower().strip()
                         list_status=task_manager.filtered_task_pending_or_completed(status)
                         
                         print(f"{len(list_status)} matches found")
-                        for t in list_status:
-                            print(t)
+                        for i,t in enumerate(list_status):
+                            i+=1
+                            print(f"{i}. {t}")
                     
 
                     case 5:
-                        if not task_manager.list_of_tasks:
-                           print("There are no tasks.") 
-                        else:
-                            summary=task_manager.general_summary()
-                            print(f"Tasks completed: {summary[0]}")
-                            print(f"Tasks pendig: {summary[1]}")
-                            print(f"Completion rate: {summary[2]}%")
+                        summary=task_manager.general_summary()
+                        print(f"Tasks completed: {summary[0]}")
+                        print(f"Tasks pendig: {summary[1]}")
+                        print(f"Completion rate: {summary[2]}%")
+
 
                     case 6:
                         tasks_by_priority=task_manager.tasks_for_priority()
