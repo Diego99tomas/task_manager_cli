@@ -49,9 +49,17 @@ class TaskManager:
             
     
     def tasks_for_priority(self):
-        priority_high=[task for task in self.list_of_tasks if task.priority=="high"]
-        priority_medium=[task for task in self.list_of_tasks if task.priority=="medium"]
-        priority_low=[task for task in self.list_of_tasks if task.priority=="low"]
+        priority_high=[]
+        priority_medium=[]
+        priority_low=[]
+
+        for task in self.list_of_tasks:
+            if task.priority=="high":
+                priority_high.append(task)
+            elif task.priority=="medium":
+                priority_medium.append(task)
+            else:
+                priority_low.append(task)
         
         return len(priority_high),len(priority_medium),len(priority_low)
 
@@ -63,8 +71,5 @@ class TaskManager:
         
         self.list_of_tasks.pop(pos-1)
         self.my_storage.save_task(self.list_of_tasks)
-        
-        
-
 
         
