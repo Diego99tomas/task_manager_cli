@@ -25,12 +25,12 @@ class TaskManager:
         self.my_storage.save_task(self.list_of_tasks)
 
     
-    def filtered_task_pending_or_completed(self,status:str):
+    def filtered_task_pending_or_completed(self,status:str)-> list:
         filtered_tasks_list=[task for task in self.list_of_tasks if task.status==status]
         return filtered_tasks_list 
 
 
-    def general_summary(self):
+    def general_summary(self)->list:
         if not self.list_of_tasks:
             return [0,0,0.0]
         
@@ -54,4 +54,17 @@ class TaskManager:
         priority_low=[task for task in self.list_of_tasks if task.priority=="low"]
         
         return len(priority_high),len(priority_medium),len(priority_low)
+
+    
+    def delete_task(self,pos):
+        #RECIBIR POSI, OBTENER ID, PASAR ID LUEOG INFORMAR
+        if pos<=0 or pos>len(self.list_of_tasks):
+            raise IndexError("Task position out of range")
+        
+        self.list_of_tasks.pop(pos-1)
+        self.my_storage.save_task(self.list_of_tasks)
+        
+        
+
+
         
