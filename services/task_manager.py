@@ -1,5 +1,6 @@
 from models.task import Task
 from storage.json_storage import Storage
+from models.custom_exceptions import RangeError
 
 class TaskManager:
     def __init__(self):
@@ -19,7 +20,7 @@ class TaskManager:
 
     def task_completed(self,pos:int):
         if pos<=0 or pos>len(self.list_of_tasks):
-            raise IndexError("Task position out of range")
+            raise RangeError(pos,len(self.list_of_tasks))
 
         self.list_of_tasks[pos-1].status="completed"
         self.my_storage.save_task(self.list_of_tasks)
@@ -65,9 +66,9 @@ class TaskManager:
 
     
     def delete_task(self,pos):
-        #RECIBIR POSI, OBTENER ID, PASAR ID LUEOG INFORMAR
+        #MEJORA? RECIBIR POSICION, OBTENER ID, PASAR ID 
         if pos<=0 or pos>len(self.list_of_tasks):
-            raise IndexError("Task position out of range")
+            raise RangeError(pos,len(self.list_of_tasks))
         
         self.list_of_tasks.pop(pos-1)
         self.my_storage.save_task(self.list_of_tasks)
