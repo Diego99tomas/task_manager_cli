@@ -1,11 +1,6 @@
 from services.task_manager import TaskManager
-from models.custom_exceptions import RangeError
+from core.custom_exceptions import RangeError
 task_manager=TaskManager()
-
-def print_tasks(list_tasks:list):
-    for i,task in enumerate(list_tasks):
-        i=+1
-        print(f"{i}. {task}")
 
 def show_menu():
         while True:

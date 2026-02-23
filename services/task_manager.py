@@ -1,6 +1,6 @@
 from models.task import Task
 from storage.json_storage import Storage
-from models.custom_exceptions import RangeError
+from core.custom_exceptions import RangeError
 
 class TaskManager:
     def __init__(self):
