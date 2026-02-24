@@ -1,6 +1,15 @@
 from services.task_manager import TaskManager
+from storage.json_storage import Storage
 from core.custom_exceptions import RangeError
-task_manager=TaskManager()
+
+storage=Storage()
+task_manager=TaskManager(storage)
+
+def print_tasks(list_tasks:list):
+    for i,task in enumerate(list_tasks):
+        i+=1
+        print(f"{i}. {task}")
+
 
 def show_menu():
         while True:
@@ -28,16 +37,14 @@ def show_menu():
                             task_manager.add_task(title,description,priority)
                             print("Task added correctly")
                         except ValueError:
-                            print("Choose one of the option mentioned")
+                            print(f"{ValueError}")
     
                     case 2:
                         show_task=task_manager.show_all_tasks()
                         if not show_task:
                             print("List task empty")
                         else:
-                            for i,task in enumerate(show_task):
-                                i+=1
-                                print(f"{i}.{task}")
+                            print_tasks(show_task)
 
                     case 3:
                         try:
@@ -56,9 +63,7 @@ def show_menu():
                         list_status=task_manager.filtered_task_pending_or_completed(status)
                         
                         print(f"{len(list_status)} matches found")
-                        for i,t in enumerate(list_status):
-                            i+=1
-                            print(f"{i}. {t}")
+                        print_tasks(list_status)
                     
 
                     case 5:
@@ -75,12 +80,10 @@ def show_menu():
                         print(f"Low: {tasks_by_priority[2]}")
                     
                     case 7:
-                        show_task=task_manager.show_all_tasks()
-                        if not show_task: print("List task empty")
+                        show_tasks=task_manager.show_all_tasks()
+                        if not show_tasks: print("List task empty")
                         else:
-                            for i,task in enumerate(show_task):
-                                i+=1
-                                print(f"{i}.{task}")
+                            print_tasks(show_tasks)
 
                             try:
                                 pos=int(input("Enter the position of the completed task: "))
