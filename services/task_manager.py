@@ -1,15 +1,14 @@
-from models.task import Task
-from storage.json_storage import Storage
+from models.task import Task,Status,Priority
 from core.custom_exceptions import RangeError
 
 class TaskManager:
-    def __init__(self):
-        self.my_storage=Storage()
+    def __init__(self,storage):
+        self.my_storage=storage
         self.list_of_tasks=self.my_storage.loading_tasks()
         
 
     def add_task(self,title:str,description:str, priority:str):
-            new_task=Task(title,description,priority)
+            new_task=Task(title,description,Priority(priority))
             self.list_of_tasks.append(new_task)
             self.my_storage.save_task(self.list_of_tasks)   
             
@@ -22,7 +21,7 @@ class TaskManager:
         if pos<=0 or pos>len(self.list_of_tasks):
             raise RangeError(pos,len(self.list_of_tasks))
 
-        self.list_of_tasks[pos-1].status="completed"
+        self.list_of_tasks[pos-1].status=Status.COMPLETED
         self.my_storage.save_task(self.list_of_tasks)
 
     

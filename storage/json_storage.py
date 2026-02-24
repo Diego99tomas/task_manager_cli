@@ -1,5 +1,5 @@
 import json
-from models.task import Task
+from models.task import Task,Status,Priority
 
 class Storage:
     NAME_STORAGE="storage/stored_tasks.json"
@@ -32,13 +32,13 @@ class Storage:
             "id": task.id,
             "title":task.title,
             "description":task.description,
-            "priority":task.priority,
-            "status":task.status,
+            "priority":task.priority.value,
+            "status":task.status.value,
             "created_at":task.created_at
         }  
     
     
     @staticmethod
     def from_dict(data):
-        return Task(id=data["id"],title=data["title"],description=data["description"],priority=data["priority"],status=data["status"],created_at=data["created_at"])
+        return Task(id=data["id"],title=data["title"],description=data["description"],priority=Priority(data["priority"]),status=Status(data["status"]),created_at=data["created_at"])
     
