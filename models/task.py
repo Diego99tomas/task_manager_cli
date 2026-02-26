@@ -8,7 +8,7 @@ class Status(str,Enum):
 
 class Priority(str,Enum):
     HIGH='high'
-    MEIDUM='medium'
+    MEDIUM='medium'
     LOW='low'
 
 class Task:
