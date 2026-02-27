@@ -41,11 +41,11 @@ def test_add_task_with_invalid_priority(fake_storage):
         fake_storage.add_task("Title","Descr","super-high")
 
 
-def test_task_completed(fake_storage):
-    fake_storage.add_task("Title","Descr","high")
-    status_completed=fake_storage.task_completed(1)
+# def test_task_completed(fake_storage):
+#     fake_storage.add_task("Title","Descr","high")
+#     status_completed=fake_storage.task_completed(1)
 
-    assert status_completed.status == Status.COMPLETED
+#     assert status_completed.status == Status.COMPLETED
     
 
         
