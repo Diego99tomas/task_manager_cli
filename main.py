@@ -34,7 +34,8 @@ def show_menu():
                             title=input("Title of task: ").strip()
                             description=input("Enter task description : ").strip()
                             priority=input("Priority: high,medium,low : ").lower().strip()
-                            task_manager.add_task(title,description,priority)
+                            new_task=task_manager.add_task(title,description,priority)
+                            print(new_task)
                             print("Task added correctly")
                         except ValueError:
                             print(f"{ValueError}")
@@ -49,7 +50,9 @@ def show_menu():
                     case 3:
                         try:
                             pos=int(input("Enter the position of the completed task: "))
-                            task_manager.task_completed(pos)
+                            task_id=task_manager.get_id(pos)
+                            t=task_manager.task_completed(task_id)
+                            print(t)
                             print("Task modified correctly") 
                                     
                         except ValueError:

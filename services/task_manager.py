@@ -1,5 +1,6 @@
 from models.task import Task,Status,Priority
 from core.custom_exceptions import RangeError
+import uuid
 
 class TaskManager:
     def __init__(self,storage):
@@ -10,20 +11,20 @@ class TaskManager:
     def add_task(self,title:str,description:str, priority:str):
             new_task=Task(title,description,Priority(priority))
             self.list_of_tasks.append(new_task)
-            self.my_storage.save_task(self.list_of_tasks)   
+            self.my_storage.save_task(self.list_of_tasks) 
+            return new_task  
             
            
     def show_all_tasks(self):
         return self.list_of_tasks
     
 
-    def task_completed(self,pos:int):
-        if pos<=0 or pos>len(self.list_of_tasks):
-            raise RangeError(pos,len(self.list_of_tasks))
-
-        self.list_of_tasks[pos-1].status=Status.COMPLETED
-        self.my_storage.save_task(self.list_of_tasks)
-
+    def task_completed(self,task_id):
+            for t in self.list_of_tasks:
+                if t.id==task_id:
+                    t.status=Status.COMPLETED
+                    self.my_storage.save_task(self.list_of_tasks)
+            return t
     
     def filtered_task_pending_or_completed(self,status:str)-> list:
         filtered_tasks_list=[task for task in self.list_of_tasks if task.status==status]
@@ -32,7 +33,7 @@ class TaskManager:
 
     def general_summary(self)->list:
         if not self.list_of_tasks:
-            return [0,0,0.0]
+            return [(0),(0),(0.0)]
         
         completed=[] 
         pending=[] 
@@ -71,5 +72,18 @@ class TaskManager:
         
         self.list_of_tasks.pop(pos-1)
         self.my_storage.save_task(self.list_of_tasks)
+
+    
+    def get_id(self,pos):
+        if pos<=0 or pos>len(self.list_of_tasks):
+            raise RangeError(pos,len(self.list_of_tasks))
+        task=self.list_of_tasks[pos-1]
+        ver=uuid.UUID(task.id)
+        print(ver)
+
+        if not isinstance(ver,uuid.UUID):
+            raise TypeError(f"Incorrect ID")
+        else:
+            return task.id
 
         
