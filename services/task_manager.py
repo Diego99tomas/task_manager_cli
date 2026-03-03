@@ -1,6 +1,5 @@
 from models.task import Task,Status,Priority
-from core.custom_exceptions import RangeError
-import uuid
+from core.custom_exceptions import TaskNotFoundError
 
 class TaskManager:
     def __init__(self,storage):
@@ -20,12 +19,14 @@ class TaskManager:
     
 
     def task_completed(self,task_id):
-            for t in self.list_of_tasks:
-                if t.id==task_id:
-                    t.status=Status.COMPLETED
+            for task in self.list_of_tasks:
+                if task.id==task_id:
+                    task.status=Status.COMPLETED
                     self.my_storage.save_task(self.list_of_tasks)
-            return t
-    
+                    return task
+            raise TaskNotFoundError(task_id)
+
+
     def filtered_task_pending_or_completed(self,status:str)-> list:
         filtered_tasks_list=[task for task in self.list_of_tasks if task.status==status]
         return filtered_tasks_list 
@@ -65,25 +66,13 @@ class TaskManager:
         return len(priority_high),len(priority_medium),len(priority_low)
 
     
-    def delete_task(self,pos):
-        #MEJORA? RECIBIR POSICION, OBTENER ID, PASAR ID 
-        if pos<=0 or pos>len(self.list_of_tasks):
-            raise RangeError(pos,len(self.list_of_tasks))
-        
-        self.list_of_tasks.pop(pos-1)
-        self.my_storage.save_task(self.list_of_tasks)
-
-    
-    def get_id(self,pos):
-        if pos<=0 or pos>len(self.list_of_tasks):
-            raise RangeError(pos,len(self.list_of_tasks))
-        task=self.list_of_tasks[pos-1]
-        ver=uuid.UUID(task.id)
-        print(ver)
-
-        if not isinstance(ver,uuid.UUID):
-            raise TypeError(f"Incorrect ID")
-        else:
-            return task.id
-
-        
+    def delete_task(self,id_for_delete):
+        # if not self.list_of_tasks:
+        #     return
+        for task in self.list_of_tasks:
+            if task.id==id_for_delete:
+                self.list_of_tasks.remove(task)
+                self.my_storage.save_task(self.list_of_tasks)
+                return task
+        raise TaskNotFoundError(id_for_delete)
+              

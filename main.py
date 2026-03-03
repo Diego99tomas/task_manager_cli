@@ -1,6 +1,6 @@
 from services.task_manager import TaskManager
 from storage.json_storage import Storage
-from core.custom_exceptions import RangeError
+from core.custom_exceptions import RangeError,TaskNotFoundError
 
 storage=Storage()
 task_manager=TaskManager(storage)
@@ -50,15 +50,17 @@ def show_menu():
                     case 3:
                         try:
                             pos=int(input("Enter the position of the completed task: "))
-                            task_id=task_manager.get_id(pos)
+                            task_id=task_manager.list_of_tasks[pos-1].id
                             t=task_manager.task_completed(task_id)
                             print(t)
                             print("Task modified correctly") 
                                     
                         except ValueError:
                             print("Enter a number")
-                        except RangeError as e:
-                            print(f"Error: {e}") 
+                        except IndexError:
+                            print(f"Out of range.")
+                        except TaskNotFoundError as e:
+                            print(f"Error: {e} ")
                             
 
                     case 4:
@@ -90,14 +92,17 @@ def show_menu():
 
                             try:
                                 pos=int(input("Enter the position of the completed task: "))
-                                if str(input("Sure?  s/n: ").strip().lower())=="s":
-                                    task_manager.delete_task(pos)
-                                    print("Task removed")
+                                get_id=task_manager.list_of_tasks[pos-1].id
+                                if str(input("Are you sure?  s/n: ").strip().lower())=="s":
+                                    task_removed=task_manager.delete_task(get_id)
+                                    print(f"Task removed : {task_removed.title}")
 
                             except ValueError:
                                 print("Enter a number")
-                            except RangeError as e:
-                                print(f"Error: {e}") 
+                            except IndexError:
+                               print(f"Out of range.")
+                            except TaskNotFoundError as e:
+                                print(f"Error: {e} ")
                             
                                 
                 
