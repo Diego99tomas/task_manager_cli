@@ -1,14 +1,22 @@
 from services.task_manager import TaskManager
 from storage.json_storage import Storage
-from core.custom_exceptions import RangeError,TaskNotFoundError
+from core.custom_exceptions import TaskNotFoundError
 
 storage=Storage()
 task_manager=TaskManager(storage)
 
-def print_tasks(list_tasks:list):
+def print_tasks(list_tasks):
+    if not list_tasks:
+        print("List task empty")
+        return 
     for i,task in enumerate(list_tasks):
         i+=1
         print(f"{i}. {task}")
+
+def task_by_id(pos:int)->str:
+    id_list=list(task_manager.tasks.keys())
+    return id_list[pos-1]
+
 
 
 def show_menu():
@@ -38,19 +46,17 @@ def show_menu():
                             print(new_task)
                             print("Task added correctly")
                         except ValueError:
-                            print(f"{ValueError}")
+                            print(f"Error Priority option: high, medium or low")
     
                     case 2:
                         show_task=task_manager.show_all_tasks()
-                        if not show_task:
-                            print("List task empty")
-                        else:
-                            print_tasks(show_task)
+                        print_tasks(show_task)
 
                     case 3:
+                        
                         try:
                             pos=int(input("Enter the position of the completed task: "))
-                            task_id=task_manager.list_of_tasks[pos-1].id
+                            task_id=task_by_id(pos)
                             t=task_manager.task_completed(task_id)
                             print(t)
                             print("Task modified correctly") 
@@ -86,23 +92,21 @@ def show_menu():
                     
                     case 7:
                         show_tasks=task_manager.show_all_tasks()
-                        if not show_tasks: print("List task empty")
-                        else:
-                            print_tasks(show_tasks)
+                        print_tasks(show_tasks)
 
-                            try:
-                                pos=int(input("Enter the position of the completed task: "))
-                                get_id=task_manager.list_of_tasks[pos-1].id
-                                if str(input("Are you sure?  s/n: ").strip().lower())=="s":
-                                    task_removed=task_manager.delete_task(get_id)
-                                    print(f"Task removed : {task_removed.title}")
+                        try:
+                            pos=int(input("Enter the position of the completed task: "))
+                            id_task=task_by_id(pos)
+                            if str(input("Are you sure?  s/n: ").strip().lower())=="s":
+                                task_removed=task_manager.delete_task(id_task)
+                                print(f"Task removed : {task_removed.title}")
 
-                            except ValueError:
-                                print("Enter a number")
-                            except IndexError:
-                               print(f"Out of range.")
-                            except TaskNotFoundError as e:
-                                print(f"Error: {e} ")
+                        except ValueError:
+                            print("Enter a number")
+                        except IndexError:
+                            print(f"Out of range.")
+                        except TaskNotFoundError as e:
+                            print(f"Error: {e} ")
                             
                                 
                 

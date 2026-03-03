@@ -30,4 +30,5 @@ class Task:
 
  
     def __str__(self):
-        return f"{self.id} | Task: {self.title} | Description: {self.description} | Priority: {self.priority.value} | Status: {self.status.value} | Date created: {self.created_at} "
+        return f"Task: {self.title} | Description: {self.description} | Priority: {self.priority.value} | Status: {self.status.value} | Date created: {self.created_at} "
+        # return f"{self.id} | Task: {self.title} | Description: {self.description} | Priority: {self.priority.value} | Status: {self.status.value} | Date created: {self.created_at} "

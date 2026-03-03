@@ -4,48 +4,52 @@ from core.custom_exceptions import TaskNotFoundError
 class TaskManager:
     def __init__(self,storage):
         self.my_storage=storage
-        self.list_of_tasks=self.my_storage.loading_tasks()
-        
+        loaded_tasks=self.my_storage.loading_tasks()
+        self.tasks={task.id:task for task in loaded_tasks}
 
+        
     def add_task(self,title:str,description:str, priority:str):
             new_task=Task(title,description,Priority(priority))
-            self.list_of_tasks.append(new_task)
-            self.my_storage.save_task(self.list_of_tasks) 
+            self.tasks[new_task.id]=new_task
+            self.my_storage.save_task(list(self.tasks.values())) 
             return new_task  
             
            
-    def show_all_tasks(self):
-        return self.list_of_tasks
+    def show_all_tasks(self)->dict:
+        """ Returm they values of dict"""
+        return self.tasks.values()
     
 
-    def task_completed(self,task_id):
-            for task in self.list_of_tasks:
-                if task.id==task_id:
-                    task.status=Status.COMPLETED
-                    self.my_storage.save_task(self.list_of_tasks)
-                    return task
-            raise TaskNotFoundError(task_id)
+    def task_completed(self,task_id:str)->Task:
+            """Seach by id and change status to completed"""
+            if not task_id in self.tasks:
+                raise TaskNotFoundError(task_id)
+            
+            task=self.tasks[task_id]
+            task.status=Status.COMPLETED
+            self.my_storage.save_task(list(self.tasks.values())) 
+            return task
 
 
     def filtered_task_pending_or_completed(self,status:str)-> list:
-        filtered_tasks_list=[task for task in self.list_of_tasks if task.status==status]
+        filtered_tasks_list=[task for task in self.tasks.values() if task.status==status]
         return filtered_tasks_list 
 
 
     def general_summary(self)->list:
-        if not self.list_of_tasks:
+        if not self.tasks:
             return [(0),(0),(0.0)]
         
         completed=[] 
         pending=[] 
         
-        for task_status in self.list_of_tasks:
+        for task_status in self.tasks.values():
             if task_status.status == "completed":
                 completed.append(task_status)
             else:
                 pending.append(task_status)        
         
-        rate=(len(completed)*100)/len(self.list_of_tasks)
+        rate=(len(completed)*100)/len(self.tasks.values())
         summary=[len(completed),len(pending),rate]
         return summary
             
@@ -55,7 +59,7 @@ class TaskManager:
         priority_medium=[]
         priority_low=[]
 
-        for task in self.list_of_tasks:
+        for task in self.tasks.values():
             if task.priority=="high":
                 priority_high.append(task)
             elif task.priority=="medium":
@@ -67,12 +71,10 @@ class TaskManager:
 
     
     def delete_task(self,id_for_delete):
-        # if not self.list_of_tasks:
-        #     return
-        for task in self.list_of_tasks:
-            if task.id==id_for_delete:
-                self.list_of_tasks.remove(task)
-                self.my_storage.save_task(self.list_of_tasks)
-                return task
-        raise TaskNotFoundError(id_for_delete)
+        if not id_for_delete in self.tasks:
+            raise TaskNotFoundError(id_for_delete)
+
+        t=self.tasks.pop(id_for_delete)
+        self.my_storage.save_task(list(self.tasks.values())) 
+        return t
               
