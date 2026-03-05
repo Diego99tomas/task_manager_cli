@@ -1,6 +1,7 @@
 from services.task_manager import TaskManager
 from storage.json_storage import Storage
 from core.custom_exceptions import TaskNotFoundError
+from models.task import Status
 
 storage=Storage()
 task_manager=TaskManager(storage)
@@ -71,7 +72,8 @@ def show_menu():
 
                     case 4:
                         status=input("Enter completed or pending: ").lower().strip()
-                        list_status=task_manager.filtered_task_pending_or_completed(status)
+                        
+                        list_status=task_manager.filtered_task_pending_or_completed(Status(status))
                         
                         print(f"{len(list_status)} matches found")
                         print_tasks(list_status)
@@ -79,16 +81,16 @@ def show_menu():
 
                     case 5:
                         summary=task_manager.general_summary()
-                        print(f"Tasks completed: {summary[0]}")
-                        print(f"Tasks pendig: {summary[1]}")
-                        print(f"Completion rate: {summary[2]}%")
+                        print(f"Tasks completed: {summary['completed']}")
+                        print(f"Tasks pending: {summary['pending']}")
+                        print(f"Completion rate: {summary['rate']}%")
 
 
                     case 6:
                         tasks_by_priority=task_manager.tasks_for_priority()
-                        print(f"High: {tasks_by_priority[0]}")
-                        print(f"Medium: {tasks_by_priority[1]}")
-                        print(f"Low: {tasks_by_priority[2]}")
+                        print(f"High: {tasks_by_priority['High']}")
+                        print(f"Medium: {tasks_by_priority['Medium']}")
+                        print(f"Low: {tasks_by_priority['Low']}")
                     
                     case 7:
                         show_tasks=task_manager.show_all_tasks()

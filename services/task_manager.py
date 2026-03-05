@@ -1,5 +1,6 @@
 from models.task import Task,Status,Priority
 from core.custom_exceptions import TaskNotFoundError
+from collections import Counter
 
 class TaskManager:
     def __init__(self,storage):
@@ -22,8 +23,7 @@ class TaskManager:
 
     def task_completed(self,task_id:str)->Task:
             """Seach by id and change status to completed"""
-            if not task_id in self.tasks:
-                raise TaskNotFoundError(task_id)
+            self._get_task_or_raise(task_id)
             
             task=self.tasks[task_id]
             task.status=Status.COMPLETED
@@ -31,50 +31,48 @@ class TaskManager:
             return task
 
 
-    def filtered_task_pending_or_completed(self,status:str)-> list:
+    def filtered_task_pending_or_completed(self,status:Status)-> list:
+        """Filtered tasks by status (completed or pending) and return list"""
         filtered_tasks_list=[task for task in self.tasks.values() if task.status==status]
         return filtered_tasks_list 
 
 
-    def general_summary(self)->list:
-        if not self.tasks:
-            return [(0),(0),(0.0)]
+    def general_summary(self)->dict:
+        """Show a summary the tasks completed and pending
+         and rate of tasks completed """
+        total=len(self.tasks)
+        if total==0:
+            return {"completed":0,"pending":0,"rate":0.0}
         
-        completed=[] 
-        pending=[] 
+        counts_status=Counter(task.status for task in self.tasks.values())
+        completed=counts_status[Status.COMPLETED] 
+        pending=counts_status[Status.PENDING]
         
-        for task_status in self.tasks.values():
-            if task_status.status == "completed":
-                completed.append(task_status)
-            else:
-                pending.append(task_status)        
+        rate=(completed * 100) / total
+        return {"completed":completed,
+                "pending":pending,
+                "rate":round(rate,2)
+                }
         
-        rate=(len(completed)*100)/len(self.tasks.values())
-        summary=[len(completed),len(pending),rate]
-        return summary
-            
     
     def tasks_for_priority(self):
-        priority_high=[]
-        priority_medium=[]
-        priority_low=[]
-
-        for task in self.tasks.values():
-            if task.priority=="high":
-                priority_high.append(task)
-            elif task.priority=="medium":
-                priority_medium.append(task)
-            else:
-                priority_low.append(task)
-        
-        return len(priority_high),len(priority_medium),len(priority_low)
+        """Show quantity the tasks by priority"""
+        counts=Counter(task.priority for task in self.tasks.values())
+        return{
+            "High": counts[Priority.HIGH],
+            "Medium": counts[Priority.MEDIUM],
+            "Low": counts[Priority.LOW]
+        }
 
     
-    def delete_task(self,id_for_delete):
-        if not id_for_delete in self.tasks:
-            raise TaskNotFoundError(id_for_delete)
+    def delete_task(self,id_for_delete:str):
+        self._get_task_or_raise(id_for_delete)
 
         t=self.tasks.pop(id_for_delete)
         self.my_storage.save_task(list(self.tasks.values())) 
         return t
-              
+    
+    
+    def _get_task_or_raise(self,task_id):
+        if not task_id in self.tasks:
+            raise TaskNotFoundError(task_id)
