@@ -31,8 +31,10 @@ class TaskManager:
             return task
 
 
-    def filtered_task_pending_or_completed(self,status:Status)-> list:
+    def filtered_task_pending_or_completed(self,status:Status)-> list[Task]:
         """Filtered tasks by status (completed or pending) and return list"""
+        if not isinstance(status,Status):
+             raise TypeError
         filtered_tasks_list=[task for task in self.tasks.values() if task.status==status]
         return filtered_tasks_list 
 
