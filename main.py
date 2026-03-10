@@ -73,10 +73,15 @@ def show_menu():
                     case 4:
                         status=input("Enter completed or pending: ").lower().strip()
                         
-                        list_status=task_manager.filtered_task_pending_or_completed(Status(status))
-                        
-                        print(f"{len(list_status)} matches found")
-                        print_tasks(list_status)
+                        try:
+                            list_status=task_manager.filtered_task_pending_or_completed(Status(status))
+                            print(f"{len(list_status)} matches found")
+                            print_tasks(list_status)
+                    
+                        except ValueError:
+                            print(f"{status} not valid, write completed or pending")
+                        except TypeError:
+                            print("Not instance of Status")
                     
 
                     case 5:
